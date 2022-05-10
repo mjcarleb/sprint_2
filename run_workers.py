@@ -4,19 +4,18 @@ import pandas as pd
 
 # Create channel to Zeebe
 channel = create_camunda_cloud_channel(
-    client_id="~Ri8C.ORXfo-aic-ZsnnTzaQG-YWvJwW",
-    client_secret="WYn8cxBNHx3knm74WahUXsotBzVweHdgJ45WEW00z0ig7CN5dZszdLxeloS.eGxC",
-    cluster_id="f0e81eb1-248d-43cf-a660-ee4b4662968c",
-    region="bru-2"
+    client_id="Dk0MPLoP_F0CmECfoidErdBdcLzZxLr.",
+    client_secret="_2VaLaDvXpFqtTlUbbinhs_oT_9e.8epWXIAMe5STottheBev9293zxQHG6jGaM~",
+    cluster_id="241fa57d-bec2-4fec-9968-8f651682b023",
 )
 # Create single threaded worker
 worker = ZeebeWorker(channel)
 
-data_dir = "data/"
-street_df = pd.read_parquet(path=f"{data_dir}ideal_trades")
+data_dir = "../DataGeneration/data/"
+file_name = "street_trades"
+street_df = pd.read_parquet(path=f"{data_dir}{file_name}")
 street_idx = street_df.index
 a=3
-
 
 # Define work this client should do when trade_match_worker job exists in Zeebe
 @worker.task(task_type="trade_match_worker")
