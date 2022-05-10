@@ -54,10 +54,10 @@ async def trade_match_work(trans_ref,
     print(f"matching:  qty={quantity}")
 
     match = street_idx.isin([firm_trade]).any()
-    if not match:
-        return {"match_result": "unmatched"}
-    else:
+    if match:
         return {"match_result": "matched"}
+    else:
+        return {"match_result": "unmatched"}
 
 # Main loop
 loop = asyncio.get_event_loop()
