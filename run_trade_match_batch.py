@@ -28,6 +28,9 @@ trades = [
     {"tran_ref": "1zgh346100", "account": "987654",
      "security": "90184L102", "qty": "1450",
      "tran_type": "Receive Free", "counter_party": "1234"},
+    {"tran_ref": "1zgh346100", "account": "987654",
+     "security": "90184L102", "qty": "14500",
+     "tran_type": "Receive Free", "counter_party": "1234"},
 ]
 
 # Main loop
