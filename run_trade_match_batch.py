@@ -12,19 +12,28 @@ channel = create_camunda_cloud_channel(
 client = ZeebeClient(channel)
 
 
-async def run_proc(proc_key):
+async def run_batch(bpmn_process_id, trades):
 
-    results = await client.run_process(bpmn_process_id=bpmn_process_id,
-                                       variables={'security_id':'AA_1234'})
-    return results
+    for trade in trades:
+        results = await client.run_process(bpmn_process_id=bpmn_process_id,
+                                           variables=trade)
+        a=3
 
 bpmn_process_id = "Process_cdd8ac1b-a3e5-4467-8061-784691625fe2"
+
+trades = [
+    {"tran_ref": "1zgh346100", "account": "987654",
+     "security": "90184L102", "qty": "145",
+     "tran_type": "Receive Free", "counter_party": "1234"},
+    {"tran_ref": "1zgh346100", "account": "987654",
+     "security": "90184L102", "qty": "1450",
+     "tran_type": "Receive Free", "counter_party": "1234"},
+]
 
 # Main loop
 loop = asyncio.get_event_loop()
 try:
-    results = loop.run_until_complete(run_proc(bpmn_process_id))
-    a=3
+    results = loop.run_until_complete(run_batch(bpmn_process_id, trades))
 finally:
     loop.stop()
     loop.close()
