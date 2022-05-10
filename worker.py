@@ -19,9 +19,8 @@ async def trade_match_work(qty, account):
 
 # Main loop
 loop = asyncio.get_event_loop()
-loop.run_until_complete(worker.work())
-
-
-# Trigger this on some event (SIGTERM for example)
-async def shutdown():
-    await worker.stop()
+try:
+    loop.run_until_complete(worker.work())
+finally:
+    loop.stop()
+    loop.close()
