@@ -4,9 +4,9 @@ import pandas as pd
 
 # Create channel to Zeebe
 channel = create_camunda_cloud_channel(
-    client_id="zR0s.fLdJBnPHX.J1S8leJMS0dv4H2LI",
-    client_secret="3h7kspi_x4ic28t-y0DtP8P8Ep-jfBn3wVtM792tcYXTgz~fgL-G-m0u4ZkETSKO",
-    cluster_id="b58c17d6-f7f4-44fe-8f30-98f0bc0c4ef8",
+    client_id="~Ri8C.ORXfo-aic-ZsnnTzaQG-YWvJwW",
+    client_secret="WYn8cxBNHx3knm74WahUXsotBzVweHdgJ45WEW00z0ig7CN5dZszdLxeloS.eGxC",
+    cluster_id="f0e81eb1-248d-43cf-a660-ee4b4662968c",
     region="bru-2"
 )
 # Create single threaded worker
@@ -16,7 +16,7 @@ client = ZeebeClient(channel)
 async def run_trade_match_batch(bpmn_process_id, df):
 
     for i, (idx, trade) in enumerate(df.iterrows()):
-        if i == 3:
+        if i == 10:
             break
         else:
             await client.run_process(bpmn_process_id=bpmn_process_id,
