@@ -13,8 +13,8 @@ worker = ZeebeWorker(channel)
 
 # Define work this client should do when trade_match_worker job exists in Zeebe
 @worker.task(task_type="trade_match_worker")
-async def trade_match_work(qty, account):
-    print(f"working:  qty={qty}")
+async def trade_match_work(quantity, account):
+    print(f"working:  qty={quantity}")
     return {"match_result": "matched"}
 
 # Main loop
