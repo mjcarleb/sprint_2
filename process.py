@@ -12,19 +12,24 @@ channel = create_camunda_cloud_channel(
 client = ZeebeClient(channel)
 
 
-async def deploy_proc():
-    await client.deploy_process("process_models/trade-reconcile.bpmn")
-    await client.run_process("trade-reconcile")
-    a=3
+async def run_proc(proc_key):
 
+    results = await client.run_process(bpmn_process_id=bpmn_process_id,
+                                       variables={'security_id':'AA_1234'})
+    return results
+
+bpmn_process_id = "Process_cdd8ac1b-a3e5-4467-8061-784691625fe2"
 
 # Main loop
 loop = asyncio.get_event_loop()
 try:
-    loop.run_until_complete(deploy_proc())
+    results = loop.run_until_complete(run_proc(bpmn_process_id))
+    a=3
 finally:
     loop.stop()
     loop.close()
+    a=3
+
 
 
 
