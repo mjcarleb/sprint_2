@@ -11,8 +11,20 @@ async def run_trade_match_batch(bpmn_process_id, merged_df):
         if i == 5:
             break
         else:
+            var_dict = dict()
+            if (trade["_merge"] == "both") or (trade["_merge"] == "left only"):
+                for c in merged_df.columns:
+                    if c[-2:] == "_F":
+                        new_c = c[:-2]
+                        var_dict[new_c] = trade[c]
+            else:
+                for c in merged_df.columns:
+                    if c[-2:] == "_S":
+                        new_c = c[:-2]
+                        var_dict[new_c] = trade[c]
+            var_dict["_merge"] = trade["_merge"]
             await client.run_process(bpmn_process_id=bpmn_process_id,
-                                     variables=trade.to_dict())
+                                     variables=var_dict)
 
 # Create channel to Zeebe
 channel = create_camunda_cloud_channel(
@@ -36,7 +48,8 @@ street_ddf = dd.from_pandas(df, npartitions=2)
 firm_idx = firm_ddf.index
 street_idx = street_ddf.index
 
-merged_df = firm_ddf.merge(street_ddf, how="outer", left_index=True, right_index=True, indicator=True)
+merged_df = firm_ddf.merge(street_ddf, how="outer", left_index=True, right_index=True,
+                           suffixes=["_F", "_S"], indicator=True)
 
 # Now, send matched and unmatched trades through the process
 bpmn_process_id = "Process_cdd8ac1b-a3e5-4467-8061-784691625fe2"
