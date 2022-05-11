@@ -30,10 +30,11 @@ async def trade_match_work(trans_ref,
                            source_system,
                            trade_status,
                            user_id,
+                           ledger,
                            _merge
                            ):
 
-    print(f"merge_results:  {_merge}")
+    print(f"merge_results:  {trans_ref} from {ledger} = {_merge}")
 
     if _merge == "both":
         return {"match_result": "matched"}

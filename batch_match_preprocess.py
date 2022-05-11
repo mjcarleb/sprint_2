@@ -8,7 +8,7 @@ async def run_trade_match_batch(bpmn_process_id, merged_df):
     """Create C8 process to process all trades"""
 
     for i, (idx, trade) in enumerate(merged_df.iterrows()):
-        if i == 101:
+        if i == 5:
             break
         else:
             await client.run_process(bpmn_process_id=bpmn_process_id,
@@ -36,7 +36,7 @@ street_ddf = dd.from_pandas(df, npartitions=2)
 firm_idx = firm_ddf.index
 street_idx = street_ddf.index
 
-merged_df = firm_ddf.merge(street_ddf, how="outer", indicator=True)
+merged_df = firm_ddf.merge(street_ddf, how="outer", left_index=True, right_index=True, indicator=True)
 
 # Now, send matched and unmatched trades through the process
 bpmn_process_id = "Process_cdd8ac1b-a3e5-4467-8061-784691625fe2"
