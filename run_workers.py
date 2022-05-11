@@ -1,6 +1,5 @@
 import asyncio
 from pyzeebe import ZeebeWorker, create_camunda_cloud_channel
-import pandas as pd
 
 # Create channel to Zeebe
 channel = create_camunda_cloud_channel(
@@ -10,12 +9,6 @@ channel = create_camunda_cloud_channel(
 )
 # Create single threaded worker
 worker = ZeebeWorker(channel)
-
-data_dir = "../DataGeneration/data/"
-file_name = "street_trades"
-street_df = pd.read_parquet(path=f"{data_dir}{file_name}")
-street_idx = street_df.index
-a=3
 
 # Define work this client should do when trade_match_worker job exists in Zeebe
 @worker.task(task_type="trade_match_worker")
@@ -37,36 +30,15 @@ async def trade_match_work(trans_ref,
                            source_system,
                            trade_status,
                            user_id,
-                           matched
+                           _merge
                            ):
 
-    firm_trade = f"{account}|" + \
-                 f"{security_id}|" + \
-                 f"{quantity}|" + \
-                 f"{trans_type}|" + \
-                 f"{amount}|" + \
-                 f"{amount_currency}|" + \
-                 f"{market}|" + \
-                 f"{counter_party}|" + \
-                 f"{settle_date}|" + \
-                 f"{participant}"
+    print(f"merge_results:  {_merge}")
 
-    print(f"matching:  qty={quantity}")
-
-    matches = street_idx.isin([firm_trade])
-    if matches.any():
-        for i, match in enumerate(matches):
-            if match:
-                previously_matched = street_df["matched"].loc[street_idx[i]]
-                if previously_matched == "":
-                    # Dupes in index?
-                    street_df.at[street_idx[i], "matched"] = "matched"
-                    return {"match_result": "matched"}
-
-        # All matches already used
-        return {"match_result": "unmatched"}
+    if _merge == "both":
+        return {"match_result": "matched"}
     else:
-        return {"match_result": "unmatched"}
+        return {"match_result":  "unmatched"}
 
 # Main loop
 loop = asyncio.get_event_loop()
