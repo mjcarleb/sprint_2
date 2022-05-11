@@ -36,7 +36,8 @@ async def trade_match_work(trans_ref,
                            actual_settle_date,
                            source_system,
                            trade_status,
-                           user_id
+                           user_id,
+                           matched
                            ):
 
     firm_trade = f"{account}|" + \
@@ -52,9 +53,18 @@ async def trade_match_work(trans_ref,
 
     print(f"matching:  qty={quantity}")
 
-    match = street_idx.isin([firm_trade]).any()
-    if match:
-        return {"match_result": "matched"}
+    matches = street_idx.isin([firm_trade])
+    if matches.any():
+        for i, match in enumerate(matches):
+            if match:
+                previously_matched = street_df["matched"].loc[street_idx[i]]
+                if previously_matched == "":
+                    # Dupes in index?
+                    street_df.at[street_idx[i], "matched"] = "matched"
+                    return {"match_result": "matched"}
+
+        # All matches already used
+        return {"match_result": "unmatched"}
     else:
         return {"match_result": "unmatched"}
 
