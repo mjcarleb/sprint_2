@@ -1,4 +1,6 @@
 import asyncio
+
+import pandas as pd
 from pyzeebe import ZeebeWorker, create_camunda_cloud_channel
 import pickle
 
@@ -93,12 +95,13 @@ async def assign_resolver_work(trans_ref,
 
     # encode trade values to create X to feed DT predict model
     # result will come back as OHE
-    X = feature_enc.transform([[market, source_system, account]])
+    X = feature_enc.transform(pd.DataFrame(data={"market":[market],
+                                                 "source_system": [source_system],
+                                                 "account":  [account]}))
     resolver_ohe = dt_model.predict(X)
 
     # reverse OHE of prediction to get resolver in english
     resolver = label_enc.inverse_transform(resolver_ohe)[0][0]
-    a=3
 
     print(f"assigning resolver for {trans_ref}:  {resolver}")
 

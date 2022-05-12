@@ -2,17 +2,13 @@ import pandas as pd
 import dask.dataframe as dd
 import asyncio
 from pyzeebe import ZeebeClient, create_camunda_cloud_channel
-import numpy as np
 
 async def run_trade_match_batch(bpmn_process_id, merged_df):
     """Create C8 process to process all trades"""
 
     flag = False
     for i, (idx, trade) in enumerate(merged_df.iterrows()):
-        if flag:
-            a=3
-            flag = False
-        if i == 3000:
+        if i == 100:
             break
         else:
             var_dict = dict()
