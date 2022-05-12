@@ -92,6 +92,23 @@ async def assign_resolver_work(trans_ref,
                            _merge
                            ):
 
+    #########################################
+    # Point of reference about Ops Org model:
+    #
+    #  (1) Mary manages settlements in US
+    #  (2) Hasan manages corp actions in US
+    #  (3) Monique manages stock loan in US
+    #  (4) Greta manages settlements in EC
+    #  (5) Kareem manages corp actions in EC
+    #  (6) Suresh manages stock loan in EC
+    #  (7) Justin manages settlements in UK
+    #  (8) Bianca manages corp actions in UK
+    #  (9) Mona manages stock loan in UK
+    #  (10) Yui manages settlements in JPN
+    #  (11) Akari manages corp actions in JPN
+    #  (12) Ema manages stock loan in JPN
+    #
+    #########################################
 
     # encode trade values to create X to feed DT predict model
     # result will come back as OHE
@@ -103,9 +120,9 @@ async def assign_resolver_work(trans_ref,
     # reverse OHE of prediction to get resolver in english
     resolver = label_enc.inverse_transform(resolver_ohe)[0][0]
 
-    print(f"assigning resolver for {trans_ref}:  {resolver}")
+    print(f"creating assignment for {trans_ref}:  {resolver}")
 
-    return {"ops_resolver": f"{resolver}"}
+    return {"assignment_value": f"{resolver}"}
 
 # Main loop
 loop = asyncio.get_event_loop()
