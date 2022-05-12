@@ -2,27 +2,35 @@ import pandas as pd
 import dask.dataframe as dd
 import asyncio
 from pyzeebe import ZeebeClient, create_camunda_cloud_channel
-
+import numpy as np
 
 async def run_trade_match_batch(bpmn_process_id, merged_df):
     """Create C8 process to process all trades"""
 
+    flag = False
     for i, (idx, trade) in enumerate(merged_df.iterrows()):
-        if i == 5:
+        if flag:
+            a=3
+            flag = False
+        if i == 3000:
             break
         else:
             var_dict = dict()
-            if (trade["_merge"] == "both") or (trade["_merge"] == "left only"):
+            var_dict["_merge"] = trade["_merge"]
+
+            # Send firm values to C8 process via variables
+            if (trade["_merge"] == "both") or (trade["_merge"] == "left_only"):
                 for c in merged_df.columns:
                     if c[-2:] == "_F":
                         new_c = c[:-2]
                         var_dict[new_c] = trade[c]
+
+            # right only, send street values to C8 process via variables
             else:
                 for c in merged_df.columns:
                     if c[-2:] == "_S":
                         new_c = c[:-2]
                         var_dict[new_c] = trade[c]
-            var_dict["_merge"] = trade["_merge"]
             await client.run_process(bpmn_process_id=bpmn_process_id,
                                      variables=var_dict)
 
@@ -59,4 +67,3 @@ try:
 finally:
     loop.stop()
     loop.close()
-
