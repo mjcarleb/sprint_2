@@ -1,5 +1,6 @@
 import asyncio
 
+import numpy as np
 import pandas as pd
 from pyzeebe import ZeebeWorker, create_camunda_cloud_channel
 import pickle
@@ -49,6 +50,7 @@ async def trade_match_work(trans_ref,
                            trans_type,
                            amount,
                            amount_currency,
+                           amount_USD,
                            market,
                            counter_party,
                            participant,
@@ -80,6 +82,7 @@ async def assign_resolver_work(trans_ref,
                            trans_type,
                            amount,
                            amount_currency,
+                           amount_USD,
                            market,
                            counter_party,
                            participant,
@@ -112,10 +115,17 @@ async def assign_resolver_work(trans_ref,
 
     # encode trade values to create X to feed DT predict model
     # result will come back as OHE
+    """
     X = feature_enc.transform(pd.DataFrame(data={"market":[market],
                                                  "source_system": [source_system],
                                                  "account":  [account],
                                                  "sanctioned security":  [sanctioned_security]}))
+    """
+
+    ohe = feature_enc.transform([[market, source_system, account, sanctioned_security]])
+    amt_feature = np.array(float(amount_USD)).reshape((1,1))
+    X = np.concatenate((ohe, amt_feature), axis=1)
+    a=3
     resolver_ohe = dt_model.predict(X)
 
     # reverse OHE of prediction to get resolver in english
