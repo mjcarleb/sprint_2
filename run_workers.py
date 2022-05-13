@@ -114,7 +114,8 @@ async def assign_resolver_work(trans_ref,
     # result will come back as OHE
     X = feature_enc.transform(pd.DataFrame(data={"market":[market],
                                                  "source_system": [source_system],
-                                                 "account":  [account]}))
+                                                 "account":  [account],
+                                                 "sanctioned security":  [sanctioned_security]}))
     resolver_ohe = dt_model.predict(X)
 
     # reverse OHE of prediction to get resolver in english

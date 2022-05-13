@@ -9,7 +9,7 @@ async def run_trade_match_batch(bpmn_process_id, merged_df):
     flag = False
     for i, (idx, trade) in enumerate(merged_df.iterrows()):
         if i == 100:
-            break
+            assert 100 == 101  # should never get here
         else:
             var_dict = dict()
             var_dict["_merge"] = trade["_merge"]
