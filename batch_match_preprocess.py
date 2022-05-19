@@ -32,9 +32,9 @@ async def run_trade_match_batch(bpmn_process_id, merged_df):
 
 # Create channel to Zeebe
 channel = create_camunda_cloud_channel(
-    client_id="Dk0MPLoP_F0CmECfoidErdBdcLzZxLr.",
-    client_secret="_2VaLaDvXpFqtTlUbbinhs_oT_9e.8epWXIAMe5STottheBev9293zxQHG6jGaM~",
-    cluster_id="241fa57d-bec2-4fec-9968-8f651682b023",
+    client_id="u_eR8WbpVLktYegPjKTy_LwrwtKycxQD",
+    client_secret="gTvDm-l92oXaTbdcS.6IeypQxDQ8~hKhaUVV0C4Rq4MaSfMj4huEMiipAFxwdA2M",
+    cluster_id="b6f56d09-397c-4d96-838a-96df7f1665e4",
 )
 # Create single threaded worker
 client = ZeebeClient(channel)
@@ -57,6 +57,8 @@ merged_df = firm_ddf.merge(street_ddf, how="outer", left_index=True, right_index
 
 # Now, send matched and unmatched trades through the process
 bpmn_process_id = "Process_cdd8ac1b-a3e5-4467-8061-784691625fe2"
+bpmn_process_id = "sid-1766A6F0-B9E4-41B6-8995-413493416BBB"
+
 loop = asyncio.get_event_loop()
 try:
     results = loop.run_until_complete(run_trade_match_batch(bpmn_process_id, merged_df))

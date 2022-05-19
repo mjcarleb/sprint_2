@@ -28,9 +28,9 @@ with open(f"{model_dir}{file_name}", "rb") as f:
 ####################################################
 # Create channel to Zeebe
 channel = create_camunda_cloud_channel(
-    client_id="Dk0MPLoP_F0CmECfoidErdBdcLzZxLr.",
-    client_secret="_2VaLaDvXpFqtTlUbbinhs_oT_9e.8epWXIAMe5STottheBev9293zxQHG6jGaM~",
-    cluster_id="241fa57d-bec2-4fec-9968-8f651682b023",
+    client_id="u_eR8WbpVLktYegPjKTy_LwrwtKycxQD",
+    client_secret="gTvDm-l92oXaTbdcS.6IeypQxDQ8~hKhaUVV0C4Rq4MaSfMj4huEMiipAFxwdA2M",
+    cluster_id="b6f56d09-397c-4d96-838a-96df7f1665e4",
 )
 # Create single threaded worker
 worker = ZeebeWorker(channel)
@@ -125,7 +125,6 @@ async def assign_resolver_work(trans_ref,
     ohe = feature_enc.transform([[market, source_system, account, sanctioned_security]])
     amt_feature = np.array(float(amount_USD)).reshape((1,1))
     X = np.concatenate((ohe, amt_feature), axis=1)
-    a=3
     resolver_ohe = dt_model.predict(X)
 
     # reverse OHE of prediction to get resolver in english
