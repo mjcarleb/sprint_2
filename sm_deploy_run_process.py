@@ -7,6 +7,8 @@ async def run_trade_match_batch(bpmn_process_id, merged_df):
     """Create C8 process to process all trades"""
 
     flag = False
+    await client.deploy_process("data/sprint3-process_C8.bpmn")
+
     for i, (idx, trade) in enumerate(merged_df.iterrows()):
         if i == 100:
             assert 100 == 101  # should never get here
@@ -37,10 +39,13 @@ async def run_trade_match_batch(bpmn_process_id, merged_df):
 #    cluster_id="b6f56d09-397c-4d96-838a-96df7f1665e4",
 #)
 channel = create_insecure_channel(
-    hostname='http://44.199.120.6/'
+    hostname='44.199.120.6',
+    port=26500
 )
 # Create single threaded worker
 client = ZeebeClient(channel)
+
+
 
 # Perform batch pre-processing (match vs. unmatched trades)
 data_dir = "../DataGeneration/data/"
