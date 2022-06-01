@@ -1,7 +1,7 @@
 import pandas as pd
 import dask.dataframe as dd
 import asyncio
-from pyzeebe import ZeebeClient, create_camunda_cloud_channel
+from pyzeebe import ZeebeClient, create_camunda_cloud_channel, create_insecure_channel
 
 async def run_trade_match_batch(bpmn_process_id, merged_df):
     """Create C8 process to process all trades"""
@@ -31,10 +31,13 @@ async def run_trade_match_batch(bpmn_process_id, merged_df):
                                      variables=var_dict)
 
 # Create channel to Zeebe
-channel = create_camunda_cloud_channel(
-    client_id="u_eR8WbpVLktYegPjKTy_LwrwtKycxQD",
-    client_secret="gTvDm-l92oXaTbdcS.6IeypQxDQ8~hKhaUVV0C4Rq4MaSfMj4huEMiipAFxwdA2M",
-    cluster_id="b6f56d09-397c-4d96-838a-96df7f1665e4",
+#channel = create_camunda_cloud_channel(
+#    client_id="u_eR8WbpVLktYegPjKTy_LwrwtKycxQD",
+#    client_secret="gTvDm-l92oXaTbdcS.6IeypQxDQ8~hKhaUVV0C4Rq4MaSfMj4huEMiipAFxwdA2M",
+#    cluster_id="b6f56d09-397c-4d96-838a-96df7f1665e4",
+#)
+channel = create_insecure_channel(
+    hostname='http://44.199.120.6/'
 )
 # Create single threaded worker
 client = ZeebeClient(channel)
